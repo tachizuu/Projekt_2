@@ -6,6 +6,10 @@
 package GUI;
 
 import Film.Film;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 /**
@@ -36,9 +40,10 @@ public class FilmFönster extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         beskrivning = new javax.swing.JTextArea();
         jPanel2 = new javax.swing.JPanel();
-        Längd = new javax.swing.JLabel();
+        längd = new javax.swing.JLabel();
         regissör = new javax.swing.JLabel();
         skådespelare = new javax.swing.JLabel();
+        genre = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -54,11 +59,13 @@ public class FilmFönster extends javax.swing.JFrame {
         beskrivning.setText("beskrivning");
         jScrollPane1.setViewportView(beskrivning);
 
-        Längd.setText("Längd");
+        längd.setText("Längd");
 
         regissör.setText("Regissör");
 
         skådespelare.setText("Skådespelare");
+
+        genre.setText("Genre");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -69,19 +76,23 @@ public class FilmFönster extends javax.swing.JFrame {
                     .addComponent(regissör, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(skådespelare, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(Längd, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(längd, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(genre))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(Längd)
+                .addComponent(längd)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(regissör)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(skådespelare)
-                .addGap(0, 22, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(genre)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -108,10 +119,10 @@ public class FilmFönster extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(titel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(bild, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(bild, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -165,12 +176,13 @@ public class FilmFönster extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel Längd;
     private javax.swing.JTextArea beskrivning;
     private javax.swing.JLabel bild;
+    private javax.swing.JLabel genre;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel längd;
     private javax.swing.JLabel regissör;
     private javax.swing.JLabel skådespelare;
     private javax.swing.JLabel titel;
@@ -180,7 +192,12 @@ public class FilmFönster extends javax.swing.JFrame {
     {
         titel.setText(film.getTitel());
         beskrivning.setText(film.getBeskrivning());
-        Längd.setText("" + film.getBetyg());
+        längd.setText(film.getLängd());
+        regissör.setText(film.getRegissör());
+        skådespelare.setText(film.getSkådespelare());
+        genre.setText(film.getGenre());
+        
+        bild.setIcon(new ImageIcon(film.getBild()));
         
         this.setTitle(film.getTitel());
         this.setLocation(x, y);

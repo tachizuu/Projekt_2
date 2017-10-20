@@ -63,12 +63,12 @@
                       <Group type="102" attributes="0">
                           <Component id="titel" min="-2" pref="40" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
+                          <Component id="jPanel2" max="32767" attributes="0"/>
                       </Group>
-                      <Component id="bild" max="32767" attributes="0"/>
+                      <Component id="bild" min="-2" pref="122" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" pref="145" max="32767" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="jScrollPane1" pref="138" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -117,8 +117,11 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="regissör" alignment="1" max="32767" attributes="0"/>
                           <Component id="skådespelare" alignment="1" pref="170" max="32767" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="Längd" min="-2" pref="48" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="längd" alignment="0" min="-2" pref="48" max="-2" attributes="0"/>
+                                  <Component id="genre" min="-2" max="-2" attributes="0"/>
+                              </Group>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
@@ -129,18 +132,20 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="Längd" min="-2" max="-2" attributes="0"/>
+                      <Component id="längd" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="regissör" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="skådespelare" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="22" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="genre" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="L&#xe4;ngd">
+            <Component class="javax.swing.JLabel" name="l&#xe4;ngd">
               <Properties>
                 <Property name="text" type="java.lang.String" value="L&#xe4;ngd"/>
               </Properties>
@@ -153,6 +158,11 @@
             <Component class="javax.swing.JLabel" name="sk&#xe5;despelare">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Sk&#xe5;despelare"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="genre">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Genre"/>
               </Properties>
             </Component>
           </SubComponents>

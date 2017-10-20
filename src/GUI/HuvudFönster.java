@@ -5,7 +5,15 @@
  */
 package GUI;
 
+import Film.Film;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 /**
  *
@@ -16,6 +24,8 @@ public class HuvudFönster extends javax.swing.JFrame {
     /**
      * Creates new form HuvudFönster
      */
+    LäggTillFönster ltf = new LäggTillFönster();
+    
     public HuvudFönster() {
         initComponents();
     }
@@ -31,11 +41,20 @@ public class HuvudFönster extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
+        läggTillKnapp = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        jScrollPane1.setMaximumSize(new java.awt.Dimension(595, 32767));
+
+        läggTillKnapp.setText("Lägg till film");
+        läggTillKnapp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                läggTillKnappActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -43,7 +62,11 @@ public class HuvudFönster extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 595, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 595, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(läggTillKnapp)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -51,7 +74,9 @@ public class HuvudFönster extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(läggTillKnapp)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -71,6 +96,10 @@ public class HuvudFönster extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void läggTillKnappActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_läggTillKnappActionPerformed
+        ltf.visa();
+    }//GEN-LAST:event_läggTillKnappActionPerformed
 
     /**
      * @param args the command line arguments
@@ -110,12 +139,33 @@ public class HuvudFönster extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton läggTillKnapp;
     // End of variables declaration//GEN-END:variables
     
-    public void visa()
+    public void visa(List<Film> filmer)
     {
         this.setLocation(200, 200);
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        
+        JPanel filmContainer = new JPanel();
+        filmContainer.setPreferredSize(new Dimension(595, (filmer.size() + 1) * 75));
+        ArrayList<FilmBox> filmBox = new ArrayList<>();
+        
+        for(Film f:filmer)//    Lägger alla filmer i varsin FilmBox
+        {
+            filmBox.add(new FilmBox(f));
+            System.out.println("skapade FilmBox för film: " + f.getTitel());
+        }
+        
+        for(FilmBox fb:filmBox)//   Lägger till FilmBoxar i filmContainern
+        {
+            filmContainer.add(fb);
+            System.out.println("Lade till FilmBox i container");
+        }
+        
+        jScrollPane1.getViewport().setView(filmContainer);//    Lägger till filmContainern i jScrollPane
+        
     }
 }
