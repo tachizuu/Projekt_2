@@ -24,10 +24,11 @@ public class HuvudFönster extends javax.swing.JFrame {
     /**
      * Creates new form HuvudFönster
      */
-    LäggTillFönster ltf = new LäggTillFönster();
+    private final LäggTillFönster ltf;
     
     public HuvudFönster() {
         initComponents();
+        ltf = new LäggTillFönster();
     }
 
     /**
@@ -44,6 +45,7 @@ public class HuvudFönster extends javax.swing.JFrame {
         läggTillKnapp = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -100,7 +102,8 @@ public class HuvudFönster extends javax.swing.JFrame {
     private void läggTillKnappActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_läggTillKnappActionPerformed
         ltf.visa();
     }//GEN-LAST:event_läggTillKnappActionPerformed
-
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -141,31 +144,34 @@ public class HuvudFönster extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton läggTillKnapp;
     // End of variables declaration//GEN-END:variables
+
     
     public void visa(List<Film> filmer)
     {
         this.setLocation(200, 200);
         this.setVisible(true);
+        this.setTitle("Världens bästa filmer");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        
+        updateWindow(filmer);
+    }
+    
+    public void updateWindow(List<Film> filmer)
+    {
         JPanel filmContainer = new JPanel();
-        filmContainer.setPreferredSize(new Dimension(595, (filmer.size() + 1) * 75));
+        filmContainer.setPreferredSize(new Dimension(595, (filmer.size() + 1) * 85));
         ArrayList<FilmBox> filmBox = new ArrayList<>();
-        
         for(Film f:filmer)//    Lägger alla filmer i varsin FilmBox
         {
             filmBox.add(new FilmBox(f));
-            System.out.println("skapade FilmBox för film: " + f.getTitel());
+            
         }
         
         for(FilmBox fb:filmBox)//   Lägger till FilmBoxar i filmContainern
         {
             filmContainer.add(fb);
-            System.out.println("Lade till FilmBox i container");
         }
         
         jScrollPane1.getViewport().setView(filmContainer);//    Lägger till filmContainern i jScrollPane
-        
     }
 }

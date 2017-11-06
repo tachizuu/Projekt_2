@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import projekt.pkg2.Projekt2;
 
 /**
  *
@@ -21,6 +22,7 @@ public class FilmFönster extends javax.swing.JFrame {
     /**
      * Creates new form FilmFönster
      */
+    private Film film;
     public FilmFönster() {
         initComponents();
     }
@@ -44,17 +46,21 @@ public class FilmFönster extends javax.swing.JFrame {
         regissör = new javax.swing.JLabel();
         skådespelare = new javax.swing.JLabel();
         genre = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         bild.setBackground(new java.awt.Color(102, 102, 102));
         bild.setText("Bild");
+        bild.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         titel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         titel.setText("Titel");
 
         beskrivning.setEditable(false);
         beskrivning.setColumns(20);
+        beskrivning.setLineWrap(true);
         beskrivning.setRows(5);
         beskrivning.setText("beskrivning");
         jScrollPane1.setViewportView(beskrivning);
@@ -95,6 +101,13 @@ public class FilmFönster extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
+        jButton1.setText("Ta bort");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -102,6 +115,9 @@ public class FilmFönster extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(bild, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -122,8 +138,10 @@ public class FilmFönster extends javax.swing.JFrame {
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(bild, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -139,6 +157,11 @@ public class FilmFönster extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        //Delete movie from DB
+        Projekt2.deleteInDB(film.getId());
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -179,6 +202,7 @@ public class FilmFönster extends javax.swing.JFrame {
     private javax.swing.JTextArea beskrivning;
     private javax.swing.JLabel bild;
     private javax.swing.JLabel genre;
+    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
@@ -188,20 +212,28 @@ public class FilmFönster extends javax.swing.JFrame {
     private javax.swing.JLabel titel;
     // End of variables declaration//GEN-END:variables
     
-    public void visaFilm(Film film, int x, int y)
+    public void visaFilm(Film movie, int x, int y)
     {
-        titel.setText(film.getTitel());
-        beskrivning.setText(film.getBeskrivning());
-        längd.setText(film.getLängd());
-        regissör.setText(film.getRegissör());
-        skådespelare.setText(film.getSkådespelare());
-        genre.setText(film.getGenre());
+        film = movie;
         
-        bild.setIcon(new ImageIcon(film.getBild()));
+        titel.setText("<html>" + Projekt2.shorten(film.getTitel(), 30) + "</html>");
+
+        beskrivning.setText(film.getBeskrivning());
+        längd.setText(Projekt2.convertTime(film.getLängd()));
+        regissör.setText(Projekt2.shorten(film.getRegissör(), 25));
+        skådespelare.setText(Projekt2.shorten(film.getSkådespelare(), 25));
+        genre.setText(Projekt2.shorten(film.getGenre(), 25));
+        ImageIcon ikon = new ImageIcon(film.getBild().getScaledInstance(90, 122, Image.SCALE_DEFAULT));
+        bild.setIcon(ikon);
         
         this.setTitle(film.getTitel());
         this.setLocation(x, y);
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }
+    
+    public boolean compareFilm(Film film)
+    {
+        return this.film == film;
     }
 }

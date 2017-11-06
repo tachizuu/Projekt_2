@@ -15,6 +15,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import projekt.pkg2.Projekt2;
 
 /**
  *
@@ -26,7 +27,7 @@ public class LäggTillFönster extends javax.swing.JFrame {
      * Creates new form LäggTillFönster
      *
      */
-    final JFileChooser jf = new JFileChooser();
+    private final JFileChooser jf = new JFileChooser();
 
     public LäggTillFönster() {
         initComponents();
@@ -73,6 +74,7 @@ public class LäggTillFönster extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         namnInput.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -139,27 +141,26 @@ public class LäggTillFönster extends javax.swing.JFrame {
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(genreInput, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jLabel5)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(väljFil))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel6)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel1)
-                                        .addComponent(jLabel2)
-                                        .addComponent(jLabel3)
-                                        .addComponent(jLabel4))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(skådespelareInput, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(regissörInput, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(längdInput, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(namnInput, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(väljFil))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(skådespelareInput, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(regissörInput, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(längdInput, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(namnInput, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -227,27 +228,32 @@ public class LäggTillFönster extends javax.swing.JFrame {
 
     private void läggTillActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_läggTillActionPerformed
 
-        String namn = namnInput.getText();
-        String längd = längdInput.getText();
-        String beskrivning = beskrivningInput.getText();
-        String regissör = regissörInput.getText();
-        String skådespelare = skådespelareInput.getText();
-        String genre = genreInput.getText();
+        try
+        {
+            String namn = namnInput.getText();
+            int längd = Integer.parseInt(längdInput.getText());
+            String beskrivning = beskrivningInput.getText();
+            String regissör = regissörInput.getText();
+            String skådespelare = skådespelareInput.getText();
+            String genre = genreInput.getText();
+            File bild = jf.getSelectedFile();
 
-        Image bild = null;
-        try {
-            bild = ImageIO.read(jf.getSelectedFile());
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+            if (bild != null)
+            {
+
+                Projekt2.postToDB(namn, längd, beskrivning, regissör, skådespelare, genre, bild);
+                this.dispose();
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(this, "Du måste välja en bild!");
+            }
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(this, "Du verkar ha skrivit fel i ett fält!");
         }
         
-        if (bild != null) {
-            Film film = new Film(namn, längd, beskrivning, regissör, skådespelare, genre, bild);
-            
-            //posta film till DB
-        } else {
-            JOptionPane.showMessageDialog(this, "Du måste välja en bild!");
-        }
     }//GEN-LAST:event_läggTillActionPerformed
 
     private void väljFilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_väljFilActionPerformed
@@ -257,10 +263,6 @@ public class LäggTillFönster extends javax.swing.JFrame {
                 "JPG- & PNG-bilder", "jpg", "png");
         jf.setFileFilter(filter);
         int returnVal = jf.showOpenDialog(this);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            System.out.println("You chose to open this file: "
-                    + jf.getSelectedFile().getName());
-        }
     }//GEN-LAST:event_väljFilActionPerformed
 
     private void genreInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genreInputActionPerformed

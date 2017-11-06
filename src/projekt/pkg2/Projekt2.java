@@ -1,36 +1,156 @@
 package projekt.pkg2;
 
-import GUI.FilmFönster;
 import GUI.HuvudFönster;
 import Film.Film;
 import java.awt.Image;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.sql.Blob;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
-public class Projekt2
-{
-    public static void main(String[] args)
+public class Projekt2 {
+    
+    public static ArrayList<Film> filmer;
+    
+    public static void main(String[] args) {
+        
+            filmer = new ArrayList<>();
+            filmer = getFromDB();
+            HuvudFönster hf = new HuvudFönster();
+            hf.visa(filmer);
+    }
+    
+    public static String convertTime(int min)
     {
+        String s = "";
+        s += (int)Math.floor(min / 60);
+        s += ":" + String.format("%02d", min % 60);;
+        return s;
+    }
+    
+    public static String shorten(String text, int längd)
+    {
+        String s = "";
+        
         try
-    {
-        ArrayList<Film> filmer = new ArrayList<>();
+        {
+            s = text.substring(0, längd) + "...";
+        }catch(Exception e)
+        {
+            s = text;
+        }
         
-        Image bild = ImageIO.read(new File("C://images/hajen.jpg"));//temporär bildlösning
-        
-        filmer.add(new Film("Filmens titel", "2:34", "Världens bästa film", "Stefan", "Johan, Anders", "skräck", bild));
-        filmer.add(new Film("Detta är en likadan film", "2:34", "Världens bästa film", "Stefan", "Johan, Anders", "skräck", bild));
-        filmer.add(new Film("Detta är en dkjlkcj film", "2:23", "Världens bästa film", "Stefan", "Johan, Anders", "skräck", bild));
-        filmer.add(new Film("asdlökasd är en likadan film", "5:34", "Världens bästa film", "Stefan", "Johan, Anders", "skräck", bild));
-        filmer.add(new Film("Detta är en likadan film", "101010", "Världens bästa film", "Stefan", "Johan, Anders", "skräck", bild));
-        filmer.add(new Film("Detta är en likadan asdljk", "mjau", "Världens bästa film", "Stefan", "Johan, Anders", "skräck", bild));
-        
-        HuvudFönster hv = new HuvudFönster();
-        hv.visa(filmer);
+        return s;
     }
-    catch(Exception e)
+    
+    public static ArrayList<Film> getFromDB()
     {
-        System.out.println(e.getMessage());
+        
+        ArrayList<Film> lista = new ArrayList<>();
+        try
+        {
+            Connection connection = getConnection();
+            Statement stmt = connection.createStatement();
+            String sql = "SELECT * FROM filmer";
+            ResultSet data = stmt.executeQuery(sql);
+            
+            while(data.next())
+            {
+                Blob blob = data.getBlob("bild");
+                Image bild = ImageIO.read(blob.getBinaryStream());
+                if(bild != null)
+                {
+                    lista.add(new Film(data.getInt("Id"), data.getString("titel"), data.getInt("längd"), data.getString("beskrivning"), data.getString("regissör"), data.getString("skådespelare"), data.getString("genre"), bild));
+                }
+            }
+        }
+        catch(Exception e)
+        {
+            System.out.println("Error: " + e.getMessage());
+            System.out.println("Något verkar ha gått fel med databasanslutningen!");
+        }
+        return lista;
     }
+    
+    public static boolean postToDB(String titel, int längd, String besk, String regissör, String skådespelare, String genre, File bild)
+    {
+        PreparedStatement ps = null;
+        InputStream is = null;
+        Connection connection = null;
+        String path = bild.getPath();
+        try
+        {
+            connection = getConnection();
+            ps = connection.prepareCall(String.format("INSERT INTO filmer VALUES(null, '%s', %d, '%s', '%s', '%s', '%s', ?);", titel, längd, besk, regissör, skådespelare, genre));
+            is = new FileInputStream(new File(path));
+            ps.setBinaryStream(1, is);
+            int count = ps.executeUpdate();
+        }
+        catch(Exception e)
+        {
+            System.out.println("Error: " + e.getMessage());
+            return false;
+        }
+        finally
+        {
+            try
+            {
+                if(is != null) is.close();
+                if(ps != null) ps.close();
+                if(connection != null) connection.close();
+            }
+            catch(Exception e)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    public static void deleteInDB(int id)
+    {   
+        PreparedStatement ps = null;
+        InputStream is = null;
+        Connection connection = null;
+        try
+        {
+            connection = getConnection();
+            ps = connection.prepareCall("DELETE FROM `filmer` WHERE `filmer`.`id` = " + id);
+            ps.executeUpdate();
+        }
+        catch(Exception e)
+        {
+            System.out.println("Error: " + e.getMessage());
+        }
+        finally
+        {
+            try
+            {
+                if(is != null) is.close();
+                if(ps != null) ps.close();
+                if(connection != null) connection.close();
+            }
+            catch(Exception e)
+            {
+                
+            }
+        }
+    }
+    
+    private static Connection getConnection() throws SQLException
+    {
+        String url = "jdbc:mysql://localhost/projekt_2";
+        String user = "root";
+        String password = "";
+        Connection connection = (com.mysql.jdbc.Connection)DriverManager.getConnection(url, user, password);
+        return connection;
     }
 }
