@@ -7,8 +7,6 @@ package GUI;
 
 import Film.Film;
 import java.awt.Image;
-import java.awt.image.BufferedImage;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import projekt.pkg2.Projekt2;
@@ -160,7 +158,9 @@ public class FilmFönster extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         //Delete movie from DB
-        Projekt2.deleteInDB(film.getId());
+        Projekt2.deleteInDB(film.getId());  //tar bort filmen ur databasen
+        Projekt2.update();
+        this.dispose(); //stänger filmfönstret
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

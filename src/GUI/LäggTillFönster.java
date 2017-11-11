@@ -8,8 +8,6 @@ package GUI;
 import Film.Film;
 import java.awt.Image;
 import java.io.File;
-import java.io.FileFilter;
-import javax.imageIO.*;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -230,19 +228,25 @@ public class LäggTillFönster extends javax.swing.JFrame {
 
         try
         {
-            String namn = namnInput.getText();
+            String namn = Projekt2.clean("forDB", namnInput.getText());
             int längd = Integer.parseInt(längdInput.getText());
-            String beskrivning = beskrivningInput.getText();
-            String regissör = regissörInput.getText();
-            String skådespelare = skådespelareInput.getText();
-            String genre = genreInput.getText();
+            String beskrivning = Projekt2.clean("forDB", beskrivningInput.getText());
+            String regissör = Projekt2.clean("forDB", regissörInput.getText());
+            String skådespelare = Projekt2.clean("forDB", skådespelareInput.getText());
+            String genre = Projekt2.clean("forDB", genreInput.getText());
             File bild = jf.getSelectedFile();
-
+            
             if (bild != null)
             {
-
-                Projekt2.postToDB(namn, längd, beskrivning, regissör, skådespelare, genre, bild);
-                this.dispose();
+                if(Projekt2.postToDB(namn, längd, beskrivning, regissör, skådespelare, genre, bild))
+                {
+                    Projekt2.update();
+                    this.dispose();
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "Kunde inte lägga till filmen");
+                }
             }
             else
             {

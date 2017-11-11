@@ -19,13 +19,19 @@ import javax.imageio.ImageIO;
 public class Projekt2 {
     
     public static ArrayList<Film> filmer;
+    public static HuvudFönster hf;
     
     public static void main(String[] args) {
         
-            filmer = new ArrayList<>();
-            filmer = getFromDB();
-            HuvudFönster hf = new HuvudFönster();
-            hf.visa(filmer);
+        filmer = new ArrayList<>();
+        hf = new HuvudFönster();
+        update();
+    }
+    
+    public static void update()     //uppdaterar filmlista, sedan huvudföstret
+    {
+        filmer = getFromDB();
+        hf.visa(filmer);
     }
     
     public static String convertTime(int min)
@@ -33,6 +39,21 @@ public class Projekt2 {
         String s = "";
         s += (int)Math.floor(min / 60);
         s += ":" + String.format("%02d", min % 60);;
+        return s;
+    }
+    
+    public static String clean(String way, String s)
+    {
+        if("forDB".equals(way))
+        {
+            String out = s.replace("'", "''");
+            return out;
+        }
+        else if("fromDB".equals(way))
+        {
+            String out = s.replace("''", "'");
+            return out;
+        }
         return s;
     }
     
@@ -68,7 +89,7 @@ public class Projekt2 {
                 Image bild = ImageIO.read(blob.getBinaryStream());
                 if(bild != null)
                 {
-                    lista.add(new Film(data.getInt("Id"), data.getString("titel"), data.getInt("längd"), data.getString("beskrivning"), data.getString("regissör"), data.getString("skådespelare"), data.getString("genre"), bild));
+                    lista.add(new Film(data.getInt("Id"), clean("fromDB", data.getString("titel")), data.getInt("längd"), clean("fromDB", data.getString("beskrivning")), clean("fromDB", data.getString("regissör")), clean("fromDB", data.getString("skådespelare")), clean("fromDB", data.getString("genre")), bild));
                 }
             }
         }
@@ -96,7 +117,6 @@ public class Projekt2 {
         }
         catch(Exception e)
         {
-            System.out.println("Error: " + e.getMessage());
             return false;
         }
         finally
