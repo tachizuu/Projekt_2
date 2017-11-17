@@ -42,37 +42,40 @@ public class Projekt2 {
         return s;
     }
     
-    public static String clean(String way, String s)
+    public static String clean(String way, String input)    //way är typen av konvertering som skall ske, eftersom apostrofer(') gör konstiga saker i databasen
     {
+        String out;
         if("forDB".equals(way))
         {
-            String out = s.replace("'", "''");
-            return out;
+            out = input.replace("'", "''");
         }
         else if("fromDB".equals(way))
         {
-            String out = s.replace("''", "'");
-            return out;
+            out = input.replace("''", "'");
         }
-        return s;
+        else
+        {
+            out = input;
+        }
+        return out;
     }
     
-    public static String shorten(String text, int längd)
+    public static String shorten(String input, int längd)
     {
         String s = "";
         
         try
         {
-            s = text.substring(0, längd) + "...";
+            s = input.substring(0, längd) + "...";
         }catch(Exception e)
         {
-            s = text;
+            s = input;
         }
         
         return s;
     }
     
-    public static ArrayList<Film> getFromDB()
+    private static ArrayList<Film> getFromDB()
     {
         
         ArrayList<Film> lista = new ArrayList<>();

@@ -5,10 +5,7 @@
  */
 package GUI;
 
-import Film.Film;
-import java.awt.Image;
 import java.io.File;
-import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -245,7 +242,7 @@ public class LäggTillFönster extends javax.swing.JFrame {
                 }
                 else
                 {
-                    JOptionPane.showMessageDialog(null, "Kunde inte lägga till filmen");
+                    JOptionPane.showMessageDialog(this, "Kunde inte lägga till filmen");
                 }
             }
             else

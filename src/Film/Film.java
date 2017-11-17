@@ -1,7 +1,6 @@
 package Film;
 
 import java.awt.Image;
-import java.io.File;
 
 public class Film
 {

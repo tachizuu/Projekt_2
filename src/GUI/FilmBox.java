@@ -6,10 +6,7 @@
 package GUI;
 
 import Film.Film;
-import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import projekt.pkg2.Projekt2;
@@ -66,6 +63,7 @@ public class FilmBox extends javax.swing.JPanel {
 
         längd.setText("längd");
 
+        bild.setText("bild");
         bild.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
